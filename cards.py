@@ -14,7 +14,22 @@ class Deck:
 
 
 def hand_value(hand):
+    """Calculate the value of a blackjack hand, treating Aces optimally."""
+    value = 0
+    aces = 0
 
-    value = sum(11 if rank == "A" else 10 if rank in {"J", "Q", "K"} else int(rank)
-                for rank, _ in hand)
+    for rank, _ in hand:
+        if rank == "A":
+            aces += 1
+            value += 11  # Initially count Ace as 11
+        elif rank in {"J", "Q", "K"}:
+            value += 10
+        else:
+            value += int(rank)
+
+    # Convert Aces from 11 to 1 as needed to avoid busting
+    while value > 21 and aces > 0:
+        value -= 10  # Convert one Ace from 11 to 1
+        aces -= 1
+
     return value
